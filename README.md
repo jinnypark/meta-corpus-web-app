@@ -8,6 +8,37 @@ Popular Music Corpus Project connects existing symbolic datasets of popular musi
 
 UROPs worked with Jinny Park on automation of spell-checking metadata and updating missing metadata, querying MusicBrainz unique ID for each song based on artist name and song title. This project aims to culminate in an interactive website, where anyone can browse the database with a user-friendly interface, along with a public API that researchers can use.
 
+## Getting started (backend)
+
+The Django backend needs a `DJANGO_SECRET_KEY` environment variable — it's never committed to the repo, so you'll need to generate your own after cloning.
+
+```sh
+cd backend
+python3 -m venv venv
+source venv/bin/activate
+pip install -r ../requirements.txt
+```
+
+Generate a random key:
+
+```sh
+python3 -c "import secrets; chars='abcdefghijklmnopqrstuvwxyz0123456789!@#\$%^&*(-_=+)'; print(''.join(secrets.choice(chars) for _ in range(50)))"
+```
+
+Add it to the bottom of `backend/venv/bin/activate` (this file is gitignored, so it stays local) so it's exported automatically every time you activate the venv:
+
+```sh
+echo "export DJANGO_SECRET_KEY='<paste-generated-key-here>'" >> venv/bin/activate
+```
+
+Re-activate the venv to pick it up, then run the server:
+
+```sh
+source venv/bin/activate
+python manage.py migrate
+python manage.py runserver
+```
+
 Screenshots of the backend, and generated score and factsheet
 
 ![](https://github.com/jinnypark/meta-corpus-web-app/blob/main/backend-scores.jpeg)
