@@ -158,3 +158,22 @@ yarn-error.log*
 # Build byproducts
 webpack-stats-dev.json
 webpack-stats.json
+
+# Local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+credentials.json
+secrets.json
+serviceAccountKey.json
+service-account*.json
+*-service-account.json
+.aws/
+backend/config/settings/local.py
+backend/config/settings/secrets.py
+db.sqlite3
