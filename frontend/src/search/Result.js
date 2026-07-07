@@ -1,13 +1,23 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-function Result({ file, hits }) {
+function Result({
+    file, title, composer, hits,
+}) {
     const [open, setOpen] = useState(false);
+    const [showPreview, setShowPreview] = useState(false);
 
     return (
         <li className="list-group-item">
             <div style={{ display: 'flex', alignItems: 'center' }}>
-                {file}
+                <div
+                    onClick={() => setShowPreview(!showPreview)}
+                    style={{ cursor: 'pointer' }}
+                    title="Click to preview the score"
+                >
+                    <div style={{ textDecoration: 'underline' }}>{title || file}</div>
+                    {composer && <small className="text-muted">{composer}</small>}
+                </div>
                 <span style={{ flex: 1 }}></span>
                 {hits}
                 <button
@@ -32,12 +42,27 @@ function Result({ file, hits }) {
                 </div>
             </div>
             }
+            {showPreview &&
+            <div style={{ marginTop: '10px' }}>
+                <p className="text-muted" style={{ marginBottom: '5px' }}>
+                    Rendering a preview may take up to 20 seconds the first time.
+                </p>
+                <embed
+                    src={`/api/score/pdf/${file}`}
+                    type="application/pdf"
+                    width="100%"
+                    height="600px"
+                />
+            </div>
+            }
         </li>
     );
 }
 
 Result.propTypes = {
     file: PropTypes.string,
+    title: PropTypes.string,
+    composer: PropTypes.string,
     hits: PropTypes.number,
 };
 

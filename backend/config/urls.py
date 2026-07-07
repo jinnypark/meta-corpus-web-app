@@ -22,6 +22,7 @@ from app.views import (
     score,
     text,
     facts,
+    pdf,
     search
 )
 
@@ -45,6 +46,7 @@ urlpatterns = [
     path('api/score/<str:filename>', score),
     path('api/score/text/<str:filename>', text),
     path('api/score/facts/<str:filename>', facts),
+    path('api/score/pdf/<str:filename>', pdf),
     path('api/search/<str:progression>', search),
 
     # View paths
