@@ -26,6 +26,7 @@ function SearchView() {
                         <input
                             value={query}
                             onChange={(e) => setQuery(e.target.value)}
+                            onKeyDown={(e) => { if (e.key === 'Enter') getResults(); }}
                             className="form-control"
                         />
                         <div className="input-group-append">
