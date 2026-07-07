@@ -611,7 +611,10 @@ module.exports = function(webpackEnv) {
         }),
         new BundleTracker({
               path: paths.statsRoot,
-              filename: 'webpack-stats.json',
+              // webpack-bundle-tracker@1.8.1 ignores `path` when locating its own
+              // output file (only `outputChunkDir` uses it) despite documenting
+              // otherwise, so `filename` must be the full absolute path here.
+              filename: path.join(paths.statsRoot, 'webpack-stats.json'),
         }),
     ].filter(Boolean),
     // Some libraries import Node modules but don't use them in the browser.
