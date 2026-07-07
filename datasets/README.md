@@ -1130,3 +1130,252 @@ python manage.py add_scores ../datasets/McGill-Billboard txt billboard
 | 888 | You've Got Another Thing Comin' | Judas Priest | 0861 | ✅ |
 | 889 | Young Hearts Run Free | Candi Staton | 0390 | ✅ |
 | 890 | Young Hearts Run Free | Candi Staton | 0522 | ✅ |
+## Meta-Corpus (post-millennial diatonic chord-loop dataset)
+
+[meta-corpus-complete-aggregate](https://www.kaggle.com/datasets/jpmusdata/meta-corpus-complete-aggregate) on Kaggle: 224 pop songs with harmonic analyses, featuring diatnoic chord loops from pop songs after 2000. 27 sample songs were expert-encoded into `.har` files (Clercq-Temperley notation, same format as the RS200 corpus above); the other 197 were converted from the CSV's scale-degree chord notation (e.g. `2-` for `ii`, `6o` for `viio`) into the same `.har` format via a Python script.
+
+Imported into the app via:
+
+```sh
+python manage.py add_scores ../datasets/meta-pop-corpus har rs
+```
+
+### Conversion from the CSV
+
+The converter preserves `$section*N` references rather than expanding them, matching how the hand-authored files themselves use these references (some sections are defined only as an alias for another, e.g. `Intro: $a*2`). It was validated against all 27 hand-authored files before running on the rest: the degree-to-Roman-numeral mapping was empirically confirmed against ~150 tokens harvested from those files, and the remaining logic (measure/bar handling, reference-vs-chord-line formatting, key derivation) was iterated until it matched musically, verified by round-tripping both the hand-authored and generated `.har` text through the actual `rs` parser and comparing the resulting chord progressions, not just comparing text.
+
+162 of 197 songs converted successfully. The 34 that didn't are all genuine gaps or typos in the source CSV — a structure line or chord reference points to a section name that's never actually defined anywhere in that song's rows, or a required row is missing entirely.
+
+### Import status
+
+**184 of 224 songs imported successfully.** Of the 40 that didn't make it in:
+
+- **34 songs** never got a `.har` file at all (see above).
+- **6 songs** got a `.har` file (hand-authored or converted) but still failed the actual `rs` import — pre-existing issues in that file's content (an unparseable chord figure, a malformed reference like `$Ch*2n`, or a reference that can't be expanded), not something introduced by the conversion process.
+
+| # | Song | Artist | Source | Status |
+|---|---|---|---|---|
+| 1 | 1-2 Step | CiaraÊ& Missy 'Misdemeanor' Elliot | hand-authored | ✅ |
+| 2 | 21 Guns | Green Day | hand-authored | ✅ |
+| 3 | 3 | Britney Spears | hand-authored | ❌ Invalid figure: R*4 |
+| 4 | 33 "GOD" | Bon Iver | hand-authored | ✅ |
+| 5 | 50 Ways to Say Goodbye | Train | hand-authored | ❌ No roman numeral found in '5' |
+| 6 | A New Day Has Come | Celine Dion | hand-authored | ✅ |
+| 7 | A Sky Full of Stars | Coldplay | auto-converted | ✅ |
+| 8 | A Thousand Miles | Vanessa Carlton | hand-authored | ❌ Invalid figure: viio. |
+| 9 | a_sky_full_of_stars.har |  | hand-authored (no CSV entry) | ❌ Invalid figure: IV. |
+| 10 | According to You | Orianthi | hand-authored | ✅ |
+| 11 | Adore You | Miley Cyrus | auto-converted | ✅ |
+| 12 | Again | Lenny Kravitz | auto-converted | ✅ |
+| 13 | Ain't It Funny | Jennifer Lopez & Ja Rule | auto-converted | ✅ |
+| 14 | Alejandro | Lady Gaga | auto-converted | ✅ |
+| 15 | All About That Bass | Meghan Trainor | auto-converted | ✅ |
+| 16 | All For You | Janet Jackson | auto-converted | ✅ |
+| 17 | All Night | Icona Pop | auto-converted | ✅ |
+| 18 | All of Me | John Legend | auto-converted | ✅ |
+| 19 | All You Wanted | Michelle Branch | auto-converted | ✅ |
+| 20 | Already Gone | Kelly Clarkson | auto-converted | ✅ |
+| 21 | Always | Erasure | auto-converted | ✅ |
+| 22 | Always On Time | Ja Rule & Ashanti | auto-converted | ✅ |
+| 23 | American Kids | Kenny Chesney | auto-converted | ❌ not converted |
+| 24 | American Oxygen | Rihanna | auto-converted | ❌ not converted |
+| 25 | Amnesia | 5 Seconds of Summer | auto-converted | ✅ |
+| 26 | Angel | Shaggy | auto-converted | ✅ |
+| 27 | Apologize | Timbaland feat. OneRepublic | auto-converted | ✅ |
+| 28 | Back Here | BBMak | auto-converted | ❌ not converted |
+| 29 | Back to December | Taylor Swift | auto-converted | ❌ not converted |
+| 30 | Back Together | Robin Thicke featuring Nicky Minaj | auto-converted | ✅ |
+| 31 | Bad Blood | Taylor Swift feat. Kendrick Lamar | auto-converted | ✅ |
+| 32 | Bad Guy | Billie Eillish | auto-converted | ❌ Cannot expand rule Chn in <music21.romanText.clercqTemperley.CTRule text='S: $In $Vr $PCh $drop $Ch $Vr_b $PCh $Ch*2n $outro'> |
+| 33 | Bad Romance | Lady Gaga | auto-converted | ✅ |
+| 34 | Bailando | Enrique Iglesias feat. Descemer Bueno and Gente de Zona | auto-converted | ✅ |
+| 35 | Bartender | Lady Antebellum | auto-converted | ✅ |
+| 36 | Battlefield | Jordin Sparks | auto-converted | ❌ not converted |
+| 37 | Be Like That | 3 Doors Down | auto-converted | ❌ not converted |
+| 38 | Be There | Krewella | auto-converted | ✅ |
+| 39 | Beautiful | Akon feat. Colby O'Donis and Kardinal Offishall | auto-converted | ✅ |
+| 40 | Beauty and a Beat | Justin Bieber featuring Nicki Minaj | auto-converted | ✅ |
+| 41 | Behind These Hazel Eyes | Kelly Clarkson | auto-converted | ✅ |
+| 42 | Best I ever Had | Drake | auto-converted | ✅ |
+| 43 | Better in Time | Leona Lewis | auto-converted | ✅ |
+| 44 | Better Now | Post Malone | auto-converted | ✅ |
+| 45 | Beyond | Daft Punk | auto-converted | ❌ not converted |
+| 46 | Big Girls Don't Cry | Fergie | auto-converted | ✅ |
+| 47 | Bitch | Merridith Brooks | auto-converted | ❌ not converted |
+| 48 | Bitch, Don't Kill My Vibe | Kendrick Lamar | auto-converted | ✅ |
+| 49 | Blank Space | Taylor Swift | auto-converted | ✅ |
+| 50 | Bleeding Love | Leona Lewis | auto-converted | ✅ |
+| 51 | Blow Me (One Last Kiss) | P!nk | auto-converted | ✅ |
+| 52 | Blurred Lines | Robin Thicke, T.I. &Â Pharrell Williams | auto-converted | ✅ |
+| 53 | Blurry | Puddle of Mudd | auto-converted | ✅ |
+| 54 | Body | Loud Luxury ft. Brando | auto-converted | ✅ |
+| 55 | Body Party | Ciara | auto-converted | ✅ |
+| 56 | Boulevard of Broken Dreams | Green Day | auto-converted | ✅ |
+| 57 | Boyfriend | Justin Bieber | auto-converted | ✅ |
+| 58 | Break a Sweat | Becky G. | auto-converted | ✅ |
+| 59 | Break Free | Ariana Grande | auto-converted | ❌ not converted |
+| 60 | Break Your Heart | Taio Cruz feat. Ludacris | auto-converted | ✅ |
+| 61 | Breakaway | Kelly Clarkson | auto-converted | ✅ |
+| 62 | Breakeven | The Script | auto-converted | ❌ not converted |
+| 63 | Breathe | Faith Hill | auto-converted | ✅ |
+| 64 | Bring Me To Life | Evanescence& Paul McCoy | auto-converted | ✅ |
+| 65 | Building a Mystery | Sarah McLachlan | auto-converted | ✅ |
+| 66 | Burn | Ellie Goulding | hand-authored | ✅ |
+| 67 | Burn | Usher | auto-converted | ❌ not converted |
+| 68 | Burnin' It Down | Jason Aldean | auto-converted | ✅ |
+| 69 | Cake | Flo Rida and 99 Percent | auto-converted | ✅ |
+| 70 | California Gurls | Katy Perry featuring Snoop Dog | auto-converted | ✅ |
+| 71 | Call Me Maybe | Carly Rae Jepsen | auto-converted | ✅ |
+| 72 | Can't Get You Out Of My Head | Kylie Minogue | auto-converted | ✅ |
+| 73 | Can't Stop Dancing | Becky G. | auto-converted | ❌ not converted |
+| 74 | Can't Stop The Feeling | Justin Timberlake | auto-converted | ✅ |
+| 75 | Case Of The Ex (Whatcha Gonna Do) | M_a | auto-converted | ✅ |
+| 76 | Chandelier | Sia | hand-authored | ✅ |
+| 77 | Chariot | Gavin DeGraw | auto-converted | ❌ not converted |
+| 78 | Chasing Cars | Snow Patrol | auto-converted | ❌ not converted |
+| 79 | Cheap Thrills | Sia feat. Sean Paul | auto-converted | ✅ |
+| 80 | Cheerleader | OMI | auto-converted | ✅ |
+| 81 | Circles | Post Malone | auto-converted | ✅ |
+| 82 | Claudia Lewis | M83 | auto-converted | ✅ |
+| 83 | Closer | The Chainsmokers ft. Halsey | auto-converted | ❌ not converted |
+| 84 | Collide | Howie Day | auto-converted | ✅ |
+| 85 | Come Over | Kenny Chesney | auto-converted | ❌ not converted |
+| 86 | Complicated | Avril Lavigne | auto-converted | ❌ not converted |
+| 87 | Contact | Daft Punk | auto-converted | ✅ |
+| 88 | Cool for the Summer | Demi Lovato | auto-converted | ✅ |
+| 89 | Cool Kids | Echosmith | auto-converted | ❌ not converted |
+| 90 | Counting Stars | OneRepublic | auto-converted | ✅ |
+| 91 | Crash and Burn | Savage Garden | auto-converted | ✅ |
+| 92 | Crash My Party | Luke Bryan | auto-converted | ✅ |
+| 93 | Crazy | Gnarls Barkley | auto-converted | ❌ not converted |
+| 94 | Crazy Girl | Eli Young Band | auto-converted | ✅ |
+| 95 | Crazy In Love | BeyoncŽ & Jay-Z | auto-converted | ✅ |
+| 96 | Cruise | Florida Georgia Line feat. Nelly | auto-converted | ✅ |
+| 97 | Dance Monkey | Tones And I | auto-converted | ❌ not converted |
+| 98 | Dancing With a Stranger | Sam Smith & Normami | auto-converted | ✅ |
+| 99 | Dangerous Woman | Ariana Grande | auto-converted | ✅ |
+| 100 | Daylight | Maroon 5 | auto-converted | ✅ |
+| 101 | Demons | Imagine Dragons | auto-converted | ✅ |
+| 102 | Despacito | Luis Fonsi & Daddy Yankee | auto-converted | ✅ |
+| 103 | Dilemma | Nelly & Kelly Rowland | auto-converted | ✅ |
+| 104 | Dirty Little Secret | The All-American Rejects | auto-converted | ✅ |
+| 105 | DJ Got Us Falling In Love Again | Usher | auto-converted | ✅ |
+| 106 | Doin' It Right | Daft Punk | auto-converted | ❌ not converted |
+| 107 | Don't Cha | The Pussycat Dolls | auto-converted | ✅ |
+| 108 | Don't Forget Me | Red Hot Chili Peppers | auto-converted | ✅ |
+| 109 | Don't Leave Me Alone | David Guetta featuring Anne-Marie | auto-converted | ✅ |
+| 110 | Don't Let Me Down | The Chainsmokers feat. Daya | auto-converted | ✅ |
+| 111 | Don't Matter | Akon | auto-converted | ✅ |
+| 112 | Don't Stop The Music | Rihanna | auto-converted | ✅ |
+| 113 | Don't Tell Me | Avril Lavigne | auto-converted | ✅ |
+| 114 | Don't Trust Me | 3OH!3 | auto-converted | ✅ |
+| 115 | Down | Jay Sean feat. Lil Wayne | auto-converted | ✅ |
+| 116 | Drive By | Train | auto-converted | ✅ |
+| 117 | Drops Of Jupiter (Tell Me) | Train | auto-converted | ✅ |
+| 118 | Drunk on You | Luke Bryan | auto-converted | ✅ |
+| 119 | Dynamite | Taio Cruz | auto-converted | ✅ |
+| 120 | E.T. | Katy Perry | hand-authored | ✅ |
+| 121 | Earned It | The Weeknd | auto-converted | ✅ |
+| 122 | Eastside | Benny Blanco, with Halsey & Khalid | auto-converted | ✅ |
+| 123 | Eenie Meenie | Sean Kingston and Justin Bieber | auto-converted | ✅ |
+| 124 | El perdon (forgiveness) |  | hand-authored (no CSV entry) | ✅ |
+| 125 | El perd—n (Forgiveness) | Nicky Jam and Enrique IglesiasÂ | auto-converted | ✅ |
+| 126 | Elastic Heart | Sia | auto-converted | ✅ |
+| 127 | Everything You Want | Vertical Horizon | auto-converted | ✅ |
+| 128 | Face Down | The Red Jumpsuit Apparatus | auto-converted | ✅ |
+| 129 | Fall for You | Secondhand Serenade | auto-converted | ✅ |
+| 130 | Fallin' | Alicia Keys | auto-converted | ✅ |
+| 131 | Family Affair | Mary J Blige | auto-converted | ❌ not converted |
+| 132 | Feel Good Inc | Gorillaz | auto-converted | ✅ |
+| 133 | Feels Like Tonight | Daughtry | auto-converted | ❌ not converted |
+| 134 | Fight Song | Rachel Platten | auto-converted | ✅ |
+| 135 | Firework | Katy Perry | auto-converted | ✅ |
+| 136 | Fly Over States | Jason Aldean | auto-converted | ✅ |
+| 137 | Follow Me | Uncle Kracker | auto-converted | ❌ not converted |
+| 138 | Foolish Games | Jewel | auto-converted | ✅ |
+| 139 | For the First Time | The Script | auto-converted | ✅ |
+| 140 | Fortress | Bloc Party | auto-converted | ❌ not converted |
+| 141 | Fragments of Time | Daft Punk | auto-converted | ✅ |
+| 142 | Fuck It (I Don't Want You Back) | Eamon | auto-converted | ✅ |
+| 143 | Fuckin' Perfect | P!nk | auto-converted | ✅ |
+| 144 | Fuckin' Problems | ASAP Rocky feat. Drake, 2 Chainz, and Kendrick Lamar | auto-converted | ❌ not converted |
+| 145 | Get Lucky | Daft Punk | hand-authored | ✅ |
+| 146 | Get The Party Started | P!nk | auto-converted | ❌ not converted |
+| 147 | Get Your Shine On | Florida Georgia Line | auto-converted | ✅ |
+| 148 | Giorgio by Moroder | Daft Punk | auto-converted | ✅ |
+| 149 | Girl Crush | Little Big Town | auto-converted | ✅ |
+| 150 | Girlfriend | Avril Lavigne | auto-converted | ❌ not converted |
+| 151 | Girls Like You | Maroon 5 & Cardi B | auto-converted | ✅ |
+| 152 | Give Life Back to Music | Daft Punk | auto-converted | ✅ |
+| 153 | Give Me Everything | Pitbull feat. NeYo, Afrojack, and Nayer | auto-converted | ✅ |
+| 154 | Gives You Hell | The All-American Rejects | auto-converted | ✅ |
+| 155 | God Gave Me You | Blake Shelton | auto-converted | ✅ |
+| 156 | Gone, Gone, Gone | Phillip Phillips | auto-converted | ✅ |
+| 157 | Heal Me | Lady Gaga | hand-authored | ✅ |
+| 158 | Heart Attack | Demi Lovato | hand-authored | ✅ |
+| 159 | Here Without You | Three Doors Down | auto-converted | ✅ |
+| 160 | Heroes (We Could Be) | Alesso featuring Tove Lo | auto-converted | ✅ |
+| 161 | Hey Mama | David Guetta featuring Nicki Minaj | hand-authored | ✅ |
+| 162 | Honest | The Chainsmokers | auto-converted | ✅ |
+| 163 | Hot 'n' cold | Katy Perry | hand-authored | ✅ |
+| 164 | Hurts So Good | Astrid S | auto-converted | ❌ not converted |
+| 165 | I Don't Care | Ed Sheeran & Justin Bieber | auto-converted | ✅ |
+| 166 | I Gotta Feeling | The Black Eyed Peas | auto-converted | ✅ |
+| 167 | I Kissed A Girl | Katy Perry | auto-converted | ✅ |
+| 168 | I Knew You Were Trouble | Taylor Swift | auto-converted | ✅ |
+| 169 | I'll Show You | Justin Bieber | auto-converted | ❌ not converted |
+| 170 | Icey | Young Thug | auto-converted | ✅ |
+| 171 | Instant Crush | Daft Punk | hand-authored | ✅ |
+| 172 | It's a Slime | Young Thug & Lil' Uzi Vert | auto-converted | ✅ |
+| 173 | It's Been Awhile | Staind | auto-converted | ✅ |
+| 174 | Lean On | Major Lazer and DJ Snake | auto-converted | ✅ |
+| 175 | Livewire | Oh Wonder | auto-converted | ✅ |
+| 176 | Lose Yourself to Dance | Daft Punk | auto-converted | ✅ |
+| 177 | Love Me Harder | Ariana Grande featuring The Weeknd | hand-authored | ✅ |
+| 178 | Love Yourself | Justin Bieber | auto-converted | ❌ not converted |
+| 179 | Midnight City | M83 | auto-converted | ✅ |
+| 180 | Mine | Taylor Swift | auto-converted | ✅ |
+| 181 | Motherboard | Daft Punk | auto-converted | ✅ |
+| 182 | Night Sky | CHVRCHES | auto-converted | ✅ |
+| 183 | Nights Like This | Kehlani ft. Ty Dolla $ign | auto-converted | ✅ |
+| 184 | Out of the Woods | Taylor Swift | auto-converted | ✅ |
+| 185 | Paris | The Chainsmokers | auto-converted | ✅ |
+| 186 | Party Rock Anthem | LMFAO | auto-converted | ✅ |
+| 187 | Perfect | Ed Sheeran | hand-authored | ❌ Cannot expand rule Vr in <music21.romanText.clercqTemperley.CTRule text='S: [Ab] $In*2 $Vr1*2 $Vr2 $Vr1 $Ch*4 $link $Vr*2 $Ch*4 $instr $Ch*4 $PostCh $outro'> |
+| 188 | Perth | Bon Iver | auto-converted | ✅ |
+| 189 | Photograph | Ed Sheeran | auto-converted | ✅ |
+| 190 | Pillow Talk | ZAYN | auto-converted | ❌ not converted |
+| 191 | Pour it Up | Rihanna | auto-converted | ✅ |
+| 192 | Problem | Ariana Grande featuring Iggy Azalea | auto-converted | ❌ not converted |
+| 193 | Radioactive | Imagine Dragons | auto-converted | ✅ |
+| 194 | Red Dirt Road | Brooks and Dunn | auto-converted | ✅ |
+| 195 | Representin' | Ludacris featuring Kelly Rowland | auto-converted | ✅ |
+| 196 | Roar | Katy Perry | auto-converted | ✅ |
+| 197 | Roses | The Chainsmokers featuring Rosez | auto-converted | ✅ |
+| 198 | Royals | Lorde | auto-converted | ✅ |
+| 199 | Same Old Love | Selena Gomez | hand-authored | ✅ |
+| 200 | Secrets | The Weeknd | hand-authored | ✅ |
+| 201 | Secrets | OneRepublic | hand-authored | ✅ |
+| 202 | See You Again | Miley Cyrus | hand-authored | ✅ |
+| 203 | Self Esteem | The Offspring | hand-authored | ✅ |
+| 204 | Shake it Off | Taylor Swift | hand-authored | ✅ |
+| 205 | Shape Of You | Ed Sheeran | auto-converted | ✅ |
+| 206 | Something Just Like This | The Chainsmokers & Coldplay | auto-converted | ✅ |
+| 207 | Sorry | Justin Bieber | auto-converted | ✅ |
+| 208 | Stardust | çsgeir | auto-converted | ✅ |
+| 209 | Style | Taylor Swift | auto-converted | ✅ |
+| 210 | Talking Body | Tove Lo | auto-converted | ✅ |
+| 211 | Teenage Dream | Katy Perry | auto-converted | ✅ |
+| 212 | The Game of Love | Daft Punk | auto-converted | ✅ |
+| 213 | The Night is Still Young | Nicki Minaj | auto-converted | ✅ |
+| 214 | Tornado | J—nsi | auto-converted | ✅ |
+| 215 | Touch | Daft Punk | auto-converted | ✅ |
+| 216 | Unconditionally | Katy Perry | auto-converted | ✅ |
+| 217 | Viva la Vida | Coldplay | auto-converted | ✅ |
+| 218 | Want to Want Me | Jason Derulo | auto-converted | ✅ |
+| 219 | We Are Never Ever Getting Back Together | Taylor Swift | auto-converted | ✅ |
+| 220 | We Can't Stop | Miley Cyrus | auto-converted | ❌ not converted |
+| 221 | What do You Mean | Justin Bieber | auto-converted | ✅ |
+| 222 | Where are Ãœ Now | Skrillex, Diplo, & Justin Biber | auto-converted | ✅ |
+| 223 | Within | Daft Punk | auto-converted | ✅ |
+| 224 | Wrecking Ball | Miley Cyrus | auto-converted | ✅ |

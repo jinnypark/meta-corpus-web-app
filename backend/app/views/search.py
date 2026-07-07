@@ -22,16 +22,22 @@ def handler(request, progression):
             count += 1
             hits = factsheet['progression'].count(progression)
             if name in score_hits:
-                score_hits[name] += hits 
+                score_hits[name]['hits'] += hits
             else:
-                score_hits[name] = hits
-            total_hits += hits 
+                score_hits[name] = {
+                    'hits': hits,
+                    'title': row.title,
+                    'composer': row.composer,
+                }
+            total_hits += hits
 
     res = {
         'time': time.time() - start_time,
         'found': count,
         'total': total,
         'hits': total_hits,
-        'scores': [{'file': key, 'hits': score_hits[key]} for key in score_hits]
+        'scores': [
+            {'file': key, **val} for key, val in score_hits.items()
+        ]
     }
     return JsonResponse(res)

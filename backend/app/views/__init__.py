@@ -22,6 +22,7 @@ def example(request, example_id):
 from .score import (
     handler_score as score,
     handler_text as text,
-    handler_facts as facts
+    handler_facts as facts,
+    handler_pdf as pdf
 )
 from .search import handler as search
