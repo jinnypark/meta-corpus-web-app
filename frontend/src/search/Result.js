@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 function Result({
-    file, title, composer, hits,
+    file, title, composer, hits, bySection,
 }) {
     const [open, setOpen] = useState(false);
 
@@ -39,6 +39,15 @@ function Result({
                     <a href={`api/score/text/${file}`} style={{ marginLeft: '10px' }}> original </a>
                     <a href={`api/score/facts/${file}`} style={{ marginLeft: '10px' }}> factsheet </a>
                 </div>
+                {bySection && Object.keys(bySection).length > 0 &&
+                <div style={{ marginTop: '5px' }}>
+                    found in sections:
+                    {' '}
+                    {Object.entries(bySection)
+                        .map(([sectionName, sectionHits]) => `"${sectionName}": ${sectionHits}`)
+                        .join(', ')}
+                </div>
+                }
                 <div style={{ marginTop: '10px' }}>
                     <p className="text-muted" style={{ marginBottom: '5px' }}>
                         Rendering a preview may take up to 20 seconds the first time.
@@ -61,6 +70,7 @@ Result.propTypes = {
     title: PropTypes.string,
     composer: PropTypes.string,
     hits: PropTypes.number,
+    bySection: PropTypes.objectOf(PropTypes.number),
 };
 
 export default Result;
