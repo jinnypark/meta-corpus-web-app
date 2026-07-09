@@ -3,6 +3,8 @@ Django==4.2.30
 django-cors-headers==4.4.0
 django-webpack-loader==3.2.4
 djangorestframework==3.15.2
+gunicorn==23.0.0
 music21==8.3.0
 pytz==2026.2
 sqlparse==0.5.5
+whitenoise==6.7.0

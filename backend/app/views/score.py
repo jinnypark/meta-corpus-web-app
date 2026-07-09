@@ -11,12 +11,18 @@ from app.models import Score
 
 PDF_CACHE_DIR = os.path.join(settings.MEDIA_ROOT, 'pdf_cache')
 
-# common MuseScore install locations, tried if `mscore`/`musescore` isn't on PATH
+# common MuseScore install locations, tried if none of these binary names
+# are on PATH. Debian/Ubuntu's musescore3 package installs as `mscore3` /
+# `musescore3` (with the version suffix), not the unsuffixed names macOS
+# Homebrew or a source build might use.
 MUSESCORE_CANDIDATES = [
+    shutil.which('mscore3'),
+    shutil.which('musescore3'),
     shutil.which('mscore'),
     shutil.which('musescore'),
     '/Applications/MuseScore 4.app/Contents/MacOS/mscore',
     '/Applications/MuseScore 3.app/Contents/MacOS/mscore',
+    '/usr/bin/musescore3',
     '/usr/bin/musescore',
 ]
 
