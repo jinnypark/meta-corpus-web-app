@@ -5,6 +5,7 @@
   "overrides": {
     "shell-quote": "1.8.4",
     "loader-utils": "1.4.2",
+    "trim-newlines": "3.0.1",
     "require": {
       "uglify-js": "2.6.0"
     },
