@@ -2,6 +2,16 @@
   "name": "meta-corpus-web",
   "version": "0.1.0",
   "private": true,
+  "overrides": {
+    "shell-quote": "1.8.4",
+    "loader-utils": "1.4.2",
+    "require": {
+      "uglify-js": "2.6.0"
+    },
+    "request": {
+      "form-data": "2.5.6"
+    }
+  },
   "dependencies": {
     "@babel/core": "7.4.3",
     "@fortawesome/fontawesome-svg-core": "^1.2.27",
