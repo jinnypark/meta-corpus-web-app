@@ -46,8 +46,8 @@ function Result({
                     <embed
                         src={`/api/score/pdf/${file}`}
                         type="application/pdf"
-                        width="100%"
-                        height="600px"
+                        width="425px"
+                        height="550px"
                     />
                 </div>
             </div>

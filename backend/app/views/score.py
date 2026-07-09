@@ -4,6 +4,7 @@ import os
 import shutil
 from django.conf import settings
 from django.http.response import HttpResponse, FileResponse
+from django.views.decorators.clickjacking import xframe_options_sameorigin
 from music21 import converter, environment
 from scripts.converters import *
 from app.models import Score
@@ -31,12 +32,20 @@ def _configure_musescore():
             return True
     return False
 
+@xframe_options_sameorigin
 def handler_pdf(request, filename):
     """
     Handler for returning a rendered PDF preview of a score, for embedding
     (not a download). PDFs are generated on first request via MuseScore
     (~15-20s) and cached on disk afterwards, since re-rendering on every
     request would be far too slow for interactive use.
+
+    Overrides the project-wide X-Frame-Options: DENY (django.middleware.
+    clickjacking.XFrameOptionsMiddleware) with SAMEORIGIN -- browsers
+    otherwise silently refuse to render embedded PDF content at all, since
+    an <embed>/<iframe> is subject to the same clickjacking protection as a
+    real frame. SAMEORIGIN keeps the protection against *other* sites
+    framing this response, while allowing our own /search page to embed it.
     """
     results = Score.objects.filter(file__contains=filename)
     if not results:
