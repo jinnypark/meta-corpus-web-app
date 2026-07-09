@@ -17,7 +17,8 @@ function ScoreView() {
                 <div className="col-12 py-3">
                     <div>
                         <h1>Score</h1>
-                        <p> Search for a score in the database </p>
+                        <p> Search for scores in the database using Roman Numerals (e.g., I-V-vi-IV). The Roman Numerals are tonic-agnostic, based on the overall diatonic collections.</p>
+                        <p> Current database includes <a href='https://rockcorpus.midside.com/harmonic_analyses.html'>RS Corpus</a>, <a href='https://ddmal.ca/research/The_McGill_Billboard_Project_(Chord_Analysis_Dataset)/'>The McGill Billboard Corpus</a>, and <a href='https://www.kaggle.com/datasets/jpmusdata/meta-corpus-complete-aggregate'>Meta-corpus</a>.</p>
                     </div>
                     <div>
                         <input
