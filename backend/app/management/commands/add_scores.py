@@ -28,19 +28,24 @@ class Command(BaseCommand):
         fmt = options['fmt']
         error_count = 0
         added_count = 0
-        files = os.listdir(src)
-        for filename in files:
-            # only upload files with specified extension
-            if filename.endswith(ext):
-                print('adding file:', filename)
-                with open(os.path.join(src, filename), 'r') as f:
+        # walk recursively so datasets shipped as one folder per song
+        # (e.g. McGill Billboard's `<id>/salami_chords.txt` layout) are
+        # picked up as well as a flat directory of files
+        for dirpath, _dirnames, filenames in os.walk(src):
+            for filename in filenames:
+                # only upload files with specified extension
+                if not filename.endswith(ext):
+                    continue
+                relpath = os.path.relpath(os.path.join(dirpath, filename), src)
+                print('adding file:', relpath)
+                with open(os.path.join(dirpath, filename), 'r') as f:
                     contents = f.read()
-                    try: 
+                    try:
                         # parse into music21 to check that can be processed
                         score = converter.parse(contents, format=fmt)
                         print('conversion successful')
                         entry = Score(
-                            file=filename,
+                            file=relpath,
                             title=score.metadata.title,
                             composer=score.metadata.composer if score.metadata.composer else '',
                             format=fmt,
@@ -49,10 +54,10 @@ class Command(BaseCommand):
                         )
                         entry.save()
                         added_count += 1
-                        print('added file to database:', filename)
+                        print('added file to database:', relpath)
                     except:
                         error_count += 1
-                        print('there was an error importing file:', filename, sys.exc_info()[1])
+                        print('there was an error importing file:', relpath, sys.exc_info()[1])
         print(f'{added_count} scores were added to the database.')
         if error_count:
             print(f'There was an error importing {error_count} files.')
