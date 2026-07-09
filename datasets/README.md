@@ -12,6 +12,12 @@ Imported into the app via:
 python manage.py add_scores ../datasets/rs200_harmony har rs
 ```
 
+The `.har` files themselves carry no artist metadata (unlike McGill Billboard's own `# artist:` header), so composer is backfilled separately from [rs200-index.txt](rs200_harmony/rs200-index.txt) — the corpus's own official song list (`https://rockcorpus.midside.com/overview/rs200.txt`), joined by filename. Re-run this after any fresh `add_scores` import:
+
+```sh
+python manage.py backfill_rs200_artists
+```
+
 ### Import status
 
 **393 of 400 files imported successfully.** The 7 that failed all involve harmony outside this corpus's normal scope: the RS200 annotations are built around **diatonic harmony** (chords expressible as plain triads or standard seventh chords within a key), and music21's Roman-numeral chord builder only constructs dominant-seventh chords from a fixed set of figures (`7`, `65`, `43`, `42`, `2`). The failing files use extended/altered dominant chords (9ths, an altered 9th, a 6th) that fall outside that diatonic vocabulary, which is outside the scope of the harmonic grammar this project focuses on. One additional file hit an unrelated parser edge case in a section reference.
@@ -1139,6 +1145,14 @@ Imported into the app via:
 ```sh
 python manage.py add_scores ../datasets/meta-pop-corpus har rs
 ```
+
+Like RS200, the `.har` files carry no artist metadata, but `aggregate_dataset.csv` has an `Artist` column per song, so composer is backfilled from there directly instead of needing an external index. Re-run this after any fresh `add_scores` import:
+
+```sh
+python manage.py backfill_metapop_artists
+```
+
+Two titles ("Burn", "Secrets") are shared by two different songs by different artists in the CSV, resolved by filename rather than guessed. One more (`el_perdon.har`) needed a manual alias since its title doesn't match its own CSV row's title due to encoding corruption in the CSV (`El perd—n` instead of `El perdón`) — which also revealed that song is a duplicate: both the hand-authored `el_perdon.har` and an auto-converted `el_perd_n_forgiveness_nicky_jam_and_enrique_iglesias.har` exist for the same song, left as-is for now but worth de-duplicating later.
 
 ### Conversion from the CSV
 
