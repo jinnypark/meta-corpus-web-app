@@ -2,7 +2,8 @@
 
 Find the demo at https://meta-corpus-web-app.fly.dev/search.
 
-![](https://github.com/jinnypark/meta-corpus-web-app/blob/main/frontend-search.png)
+<img width="1285" height="817" alt="metacorpus_search" src="https://github.com/user-attachments/assets/6bd1ca7e-aff8-47e4-af11-46d4fba58f10" />
+
 This project is part of the [AFUP program](https://web.archive.org/web/20210510194430/https://digitalhumanities.mit.edu/calls/) in the [MIT Programs in Digital Humanities](https://digitalhumanities.mit.edu), led by Jinny Park, a former Affiliated Artist in Music and Theater Arts at MIT.
 This project was done in collaboration with MIT UROP students, Kailas Kahler and Nailah Smith.
 
@@ -116,6 +117,8 @@ python manage.py remake_factsheets
 The search page (`frontend/src/search/index.js`) hits `GET /api/search/<progression>` (`backend/app/views/search.py`), which does a substring match against each score's Roman-numeral progression string (e.g. `I-V-vi-IV`) and returns which scores matched and how many times.
 
 Once you have scores loaded, try searching for a short progression fragment like `V-vi` or `IV-I` from the search page — it matches as a plain substring, so partial progressions work too.
+
+<img width="1343" height="817" alt="image" src="https://github.com/user-attachments/assets/d0d1f716-87c4-43fa-8e5e-c20584253b8e" />
 
 Individual scores can also be fetched directly:
 
